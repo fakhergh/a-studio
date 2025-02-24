@@ -1,24 +1,28 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { createRootRoute, Outlet, useLocation } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { Fragment } from 'react';
 
 import { NavBar, NavBarItemProps } from '@/components/NavBar/NavBar';
+import { Routes } from '@/constants';
 
 export const Route = createRootRoute({
     component: RootComponent,
 });
 
 const navBarItems: Array<NavBarItemProps> = [
-    { to: '/users', title: 'Users' },
-    { to: '/products', title: 'Products' },
+    { to: Routes.USERS, title: 'Users' },
+    { to: Routes.PRODUCTS, title: 'Products' },
 ];
 
 function RootComponent() {
+    const location = useLocation();
+
     return (
-        <Fragment>
-            <NavBar items={navBarItems} />
-            <Outlet />
+        <div className="flex flex-col w-screen h-screen">
+            <NavBar currentPath={location.pathname} items={navBarItems} />
+            <div className="flex flex-1 p-4 overflow-hidden">
+                <Outlet />
+            </div>
             <TanStackRouterDevtools />
-        </Fragment>
+        </div>
     );
 }

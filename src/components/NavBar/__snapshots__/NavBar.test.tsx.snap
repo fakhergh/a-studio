@@ -15,6 +15,7 @@ exports[`<NavBar/> > Should match snapshot 1`] = `
             class="relative flex h-16 items-center justify-between"
           >
             <svg
+              class="w-32"
               height="30"
               viewBox="0 0 234 30"
               width="234"
@@ -43,6 +44,7 @@ exports[`<NavBar/> > Should match snapshot 1`] = `
           class="relative flex h-16 items-center justify-between"
         >
           <svg
+            class="w-32"
             height="30"
             viewBox="0 0 234 30"
             width="234"

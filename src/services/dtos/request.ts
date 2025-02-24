@@ -7,4 +7,5 @@ export interface PaginatedResponse {
     limit: number;
     skip: number;
     total: number;
+    totalPages: number;
 }
