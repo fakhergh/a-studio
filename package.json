@@ -5,12 +5,11 @@
     "type": "module",
     "scripts": {
         "prepare": "husky",
-        "start": "serve -s dist",
+        "preview": "vite preview --port 4000",
         "dev": "vite --port 3000",
         "build": "tsc -b && vite build",
         "static:check": "eslint . && prettier --log-level silent --check --ignore-unknown .",
         "static:fix": "eslint . --fix && prettier --log-level silent --write --ignore-unknown .",
-        "preview": "vite preview",
         "test": "vitest --config ./vitest.config.ts --run",
         "test:watch": "vitest --config ./vitest.config.ts"
     },
@@ -23,7 +22,6 @@
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-redux": "^9.2.0",
-        "serve": "^14.2.4",
         "tailwindcss": "^4.0.8"
     },
     "devDependencies": {
