@@ -1,8 +1,20 @@
 import { createRootRoute, Outlet, useLocation } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { lazy, Suspense } from 'react';
 
 import { NavBar, NavBarItemProps } from '@/components/NavBar/NavBar';
 import { Routes } from '@/constants';
+
+const TanStackRouterDevtools =
+    process.env.NODE_ENV === 'production'
+        ? () => null // Render nothing in production
+        : lazy(() =>
+              // Lazy load in development
+              import('@tanstack/router-devtools').then((res) => ({
+                  default: res.TanStackRouterDevtools,
+                  // For Embedded Mode
+                  // default: res.TanStackRouterDevtoolsPanel
+              })),
+          );
 
 export const Route = createRootRoute({
     component: RootComponent,
@@ -22,7 +34,9 @@ function RootComponent() {
             <div className="flex flex-1 p-4 overflow-hidden">
                 <Outlet />
             </div>
-            <TanStackRouterDevtools />
+            <Suspense>
+                <TanStackRouterDevtools />
+            </Suspense>
         </div>
     );
 }
