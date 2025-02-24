@@ -55,7 +55,7 @@ function RouteComponent() {
     const toolbarActions: Array<ToolbarAction<ToolbarActionKey>> = [
         {
             itemKey: ToolbarActionKey.REFRESH,
-            icon: <IconRefresh className="w-4" />,
+            icon: <IconRefresh aria-label="refresh" className="w-4" />,
             disabled: isFetching,
         },
     ];
@@ -73,16 +73,16 @@ function RouteComponent() {
             id: product.id,
             title: product.title,
             category: product.category,
-            price: product.price,
+            price: `${product.price}$`,
             rating: `${product.rating} / 5`,
             stock: product.stock,
             brand: product.brand,
             sku: product.sku,
-            weight: product.weight,
+            weight: `${product.weight}kg`,
             minOrderQuantity: product.minimumOrderQuantity,
             warranty: product.warrantyInformation,
             availabilityStatus: product.availabilityStatus,
-            discountPercentage: product.discountPercentage,
+            discountPercentage: `${product.discountPercentage}%`,
         })) ?? [];
 
     const renderRow: DataTableRenderRow<ProductDataTableRowContainerProps> = (

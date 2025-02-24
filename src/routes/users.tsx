@@ -59,7 +59,7 @@ function RouteComponent() {
     const toolbarActions: Array<ToolbarAction<ToolbarActionKey>> = [
         {
             itemKey: ToolbarActionKey.REFRESH,
-            icon: <IconRefresh className="w-4" />,
+            icon: <IconRefresh aria-label="refresh" className="w-4" />,
             disabled: isFetching,
         },
     ];

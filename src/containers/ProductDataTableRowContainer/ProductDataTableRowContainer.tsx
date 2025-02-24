@@ -25,16 +25,16 @@ export interface ProductDataTableRowContainerProps
     id: number;
     title: string;
     category: string;
-    price: number;
+    price: string;
     rating: string;
     stock: number;
     brand: string;
     sku: string;
-    weight: number;
+    weight: string;
     warranty: string;
     minOrderQuantity: number;
     availabilityStatus: string;
-    discountPercentage: number;
+    discountPercentage: string;
 }
 
 export function ProductDataTableRowContainer({

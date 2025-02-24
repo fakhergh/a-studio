@@ -26,6 +26,7 @@ export function Pagination({
         <ul className="flex items-center justify-center space-x-2">
             <li>
                 <button
+                    aria-label="prev"
                     className={`w-9 h-9 p-2 border border-gray-200 rounded-lg transition ease-in-out ${page === 1 ? 'cursor-default bg-gray-50' : 'hover:bg-gray-100 cursor-pointer'}`}
                     onClick={() => onPageChange?.(page > 1 ? page - 1 : page)}
                     disabled={page === 1}
@@ -53,6 +54,7 @@ export function Pagination({
             ))}
             <li>
                 <button
+                    aria-label="next"
                     className={`w-9 h-9 p-2 border border-gray-200 rounded-lg transition ease-in-out ${page === totalPages ? 'cursor-default bg-gray-50' : 'hover:bg-gray-100 cursor-pointer'}`}
                     onClick={() =>
                         onPageChange?.(page < totalPages ? page + 1 : page)

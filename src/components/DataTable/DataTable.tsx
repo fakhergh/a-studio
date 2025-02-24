@@ -118,6 +118,7 @@ export function DataTable<T, ToolbarActionKey = string>({
 
                 {Array.isArray(limitOptions) && (
                     <Select
+                        aria-label="page-limit"
                         className="w-20"
                         value={limit}
                         options={limitOptions}
