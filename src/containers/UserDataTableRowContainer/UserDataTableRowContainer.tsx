@@ -1,23 +1,9 @@
 import {
     DataTableRow,
     DataTableRowColumn,
+    DataTableRowProps,
 } from '@/components/DataTableRow/DataTableRow';
 
-export interface UserDataTableRowContainerProps {
-    id: number;
-    firstName: string;
-    lastName: string;
-    maidenName: string;
-    age: number;
-    gender: string;
-    email: string;
-    username: string;
-    bloodGroup: string;
-    eyeColor: string;
-    phone: string;
-    university: string;
-    company: string;
-}
 enum ColumnKey {
     ID,
     FIRST_NAME,
@@ -34,6 +20,23 @@ enum ColumnKey {
     COMPANY,
 }
 
+export interface UserDataTableRowContainerProps
+    extends Pick<DataTableRowProps<ColumnKey>, 'className'> {
+    id: number;
+    firstName: string;
+    lastName: string;
+    maidenName: string;
+    age: number;
+    gender: string;
+    email: string;
+    username: string;
+    bloodGroup: string;
+    eyeColor: string;
+    phone: string;
+    university: string;
+    company: string;
+}
+
 export function UserDataTableRowContainer({
     id,
     firstName,
@@ -48,6 +51,7 @@ export function UserDataTableRowContainer({
     phone,
     university,
     company,
+    ...props
 }: UserDataTableRowContainerProps) {
     const columns: Array<DataTableRowColumn<ColumnKey>> = [
         { itemKey: ColumnKey.ID, value: id, type: 'text' },
@@ -65,5 +69,5 @@ export function UserDataTableRowContainer({
         { itemKey: ColumnKey.COMPANY, value: company, type: 'text' },
     ];
 
-    return <DataTableRow columns={columns} />;
+    return <DataTableRow columns={columns} {...props} />;
 }

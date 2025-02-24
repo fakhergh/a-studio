@@ -1,6 +1,5 @@
 import { FC } from 'react';
 
-import { IconButton } from '@/components/IconButton/IconButton';
 import { IconProps } from '@/types/icon';
 
 export interface DataTableRowColumn<ActionKey> {
@@ -14,18 +13,15 @@ export interface DataTableRowAction<ColumnKey> {
     icon: FC<IconProps>;
 }
 
-export interface DataTableRowProps<ColumnKey, ActionKey> {
+export interface DataTableRowProps<ColumnKey> {
     columns: Array<DataTableRowColumn<ColumnKey>>;
-    actions?: Array<DataTableRowAction<ActionKey>>;
-    onSwitchValueChange?: (key: ColumnKey, b: boolean) => void;
-    onActionClick?: (key: ActionKey) => void;
+    className?: string;
 }
 
-export function DataTableRow<ColumnKey, ActionKey>({
+export function DataTableRow<ColumnKey>({
     columns,
-    actions,
-    onActionClick,
-}: DataTableRowProps<ColumnKey, ActionKey>) {
+    className,
+}: DataTableRowProps<ColumnKey>) {
     const renderColumn = ({ type, value }: DataTableRowColumn<ColumnKey>) => {
         switch (type) {
             default:
@@ -34,7 +30,7 @@ export function DataTableRow<ColumnKey, ActionKey>({
     };
 
     return (
-        <tr className="relative">
+        <tr className={`relative ${className}`}>
             {columns.map((item: DataTableRowColumn<ColumnKey>) => (
                 <td
                     key={String(item.itemKey)}
@@ -43,26 +39,6 @@ export function DataTableRow<ColumnKey, ActionKey>({
                     {renderColumn(item)}
                 </td>
             ))}
-            {Array.isArray(actions) && (
-                <td className="whitespace-nowrap px-4 py-2">
-                    <div className="flex flex-1 justify-end">
-                        {actions?.map(
-                            ({
-                                itemKey,
-                                icon: Icon,
-                            }: DataTableRowAction<ActionKey>) => (
-                                <IconButton
-                                    key={String(itemKey)}
-                                    icon={
-                                        <Icon className="text-gray-500 w-4 h-4" />
-                                    }
-                                    onClick={() => onActionClick?.(itemKey)}
-                                />
-                            ),
-                        )}
-                    </div>
-                </td>
-            )}
         </tr>
     );
 }

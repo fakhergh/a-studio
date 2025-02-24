@@ -91,7 +91,13 @@ function RouteComponent() {
 
     const renderRow: DataTableRenderRow<UserDataTableRowContainerProps> = (
         item,
-    ) => <UserDataTableRowContainer {...item} />;
+        index,
+    ) => (
+        <UserDataTableRowContainer
+            {...item}
+            className={index % 2 === 0 ? 'bg-grey/30' : ''}
+        />
+    );
 
     const keyExtractor = (user: UserDataTableRowContainerProps) => user.id;
 

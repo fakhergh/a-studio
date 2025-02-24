@@ -87,7 +87,13 @@ function RouteComponent() {
 
     const renderRow: DataTableRenderRow<ProductDataTableRowContainerProps> = (
         item,
-    ) => <ProductDataTableRowContainer {...item} />;
+        index,
+    ) => (
+        <ProductDataTableRowContainer
+            {...item}
+            className={index % 2 === 0 ? 'bg-grey/30' : ''}
+        />
+    );
 
     const keyExtractor = (product: ProductDataTableRowContainerProps) =>
         product.id;

@@ -1,23 +1,9 @@
 import {
     DataTableRow,
     DataTableRowColumn,
+    DataTableRowProps,
 } from '@/components/DataTableRow/DataTableRow';
 
-export interface ProductDataTableRowContainerProps {
-    id: number;
-    title: string;
-    category: string;
-    price: number;
-    rating: string;
-    stock: number;
-    brand: string;
-    sku: string;
-    weight: number;
-    warranty: string;
-    minOrderQuantity: number;
-    availabilityStatus: string;
-    discountPercentage: number;
-}
 enum ColumnKey {
     ID,
     TITLE,
@@ -34,6 +20,23 @@ enum ColumnKey {
     DISCOUNT_PERCENTAGE,
 }
 
+export interface ProductDataTableRowContainerProps
+    extends Pick<DataTableRowProps<ColumnKey>, 'className'> {
+    id: number;
+    title: string;
+    category: string;
+    price: number;
+    rating: string;
+    stock: number;
+    brand: string;
+    sku: string;
+    weight: number;
+    warranty: string;
+    minOrderQuantity: number;
+    availabilityStatus: string;
+    discountPercentage: number;
+}
+
 export function ProductDataTableRowContainer({
     id,
     title,
@@ -48,6 +51,7 @@ export function ProductDataTableRowContainer({
     minOrderQuantity,
     availabilityStatus,
     discountPercentage,
+    ...props
 }: ProductDataTableRowContainerProps) {
     const columns: Array<DataTableRowColumn<ColumnKey>> = [
         { itemKey: ColumnKey.ID, value: id, type: 'text' },
@@ -77,5 +81,5 @@ export function ProductDataTableRowContainer({
         },
     ];
 
-    return <DataTableRow columns={columns} />;
+    return <DataTableRow columns={columns} {...props} />;
 }
