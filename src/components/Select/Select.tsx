@@ -1,29 +1,33 @@
 export interface SelectProps {
-    options: Array<string | number>;
+    label?: string;
     value?: string | number;
+    options: Array<string | number>;
     onChange?: (value: number | string) => void;
-    className?: string;
 }
 
 export function Select({
-    options,
+    label,
     value,
+    options,
     onChange,
-    className,
     ...props
 }: SelectProps) {
     return (
-        <select
-            {...props}
-            value={value}
-            onChange={(e) => onChange?.(e.target.value)}
-            className={`bg-white border border-gray-200 rounded-lg p-2 text-gray-800 focus:outline-none ${className}`}
-        >
-            {options.map((option) => (
-                <option key={option} value={option}>
-                    {option}
-                </option>
-            ))}
-        </select>
+        <label className="flex flex-col w-full">
+            <span className="text-xs text-black/70">{label}</span>
+            <select
+                {...props}
+                value={value}
+                onChange={(e) => onChange?.(e.target.value)}
+                className={`h-9 bg-white border border-gray-100 text-sm rounded-lg px-2 text-black focus:outline-none`}
+            >
+                <option value="" />
+                {options.map((option) => (
+                    <option key={option} value={option}>
+                        {option}
+                    </option>
+                ))}
+            </select>
+        </label>
     );
 }

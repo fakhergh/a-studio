@@ -25,16 +25,16 @@ export interface ProductDataTableRowContainerProps
     id: number;
     title: string;
     category: string;
-    price: string;
-    rating: string;
+    price: number;
+    rating: number;
     stock: number;
     brand: string;
     sku: string;
-    weight: string;
+    weight: number;
     warranty: string;
     minOrderQuantity: number;
     availabilityStatus: string;
-    discountPercentage: string;
+    discountPercentage: number;
 }
 
 export function ProductDataTableRowContainer({
@@ -57,12 +57,12 @@ export function ProductDataTableRowContainer({
         { itemKey: ColumnKey.ID, value: id, type: 'text' },
         { itemKey: ColumnKey.TITLE, value: title, type: 'text' },
         { itemKey: ColumnKey.CATEGORY, value: category, type: 'text' },
-        { itemKey: ColumnKey.PRICE, value: price, type: 'text' },
-        { itemKey: ColumnKey.RATING, value: rating, type: 'text' },
+        { itemKey: ColumnKey.PRICE, value: `${price}$`, type: 'text' },
+        { itemKey: ColumnKey.RATING, value: `${rating}/5`, type: 'text' },
         { itemKey: ColumnKey.STOCK, value: stock, type: 'text' },
         { itemKey: ColumnKey.BRAND, value: brand, type: 'text' },
         { itemKey: ColumnKey.SKU, value: sku, type: 'text' },
-        { itemKey: ColumnKey.WEIGHT, value: weight, type: 'text' },
+        { itemKey: ColumnKey.WEIGHT, value: `${weight}kg`, type: 'text' },
         { itemKey: ColumnKey.WARRANTY, value: warranty, type: 'text' },
         {
             itemKey: ColumnKey.MINIMUM_ORDER_QUANTITY,
@@ -76,7 +76,7 @@ export function ProductDataTableRowContainer({
         },
         {
             itemKey: ColumnKey.DISCOUNT_PERCENTAGE,
-            value: discountPercentage,
+            value: `${discountPercentage}%`,
             type: 'text',
         },
     ];

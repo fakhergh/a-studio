@@ -50,11 +50,7 @@ export interface Product {
 }
 
 export interface ProductsQueryParams extends PaginationQueryParams {
-    q?: string;
-    filter?: {
-        key: string;
-        value: string;
-    };
+    category?: string;
 }
 
 export interface ProductsPaginatedResponse extends PaginatedResponse {

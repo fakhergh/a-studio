@@ -4,6 +4,7 @@ import {
     ProductsPaginatedResponse,
     ProductsQueryParams,
 } from '@/services/dtos/product';
+import { RequestQueryParams } from '@/services/dtos/request';
 import { axiosBaseQueryWithRetry } from '@/services/httpClient';
 
 export const productSlice = createApi({
@@ -15,27 +16,16 @@ export const productSlice = createApi({
             ProductsQueryParams
         >({
             query: (
-                { skip = 0, limit = 10, q, filter } = { skip: 0, limit: 10 },
+                { skip = 0, limit = 10, category } = { skip: 0, limit: 10 },
             ) => {
-                let url: string = 'products';
+                const url =
+                    typeof category === 'string'
+                        ? `products/category/${category}`
+                        : 'products';
 
-                if (q) {
-                    url = 'products/search';
-                } else if (typeof filter === 'object') {
-                    url = 'products/filter';
-                }
+                const params: RequestQueryParams = { skip, limit };
 
-                return {
-                    url,
-                    method: 'get',
-                    params: {
-                        skip,
-                        limit,
-                        q,
-                        key: filter?.key,
-                        value: filter?.value,
-                    },
-                };
+                return { url, method: 'get', params };
             },
             onCacheEntryAdded: async (
                 { limit },

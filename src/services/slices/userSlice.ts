@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
+import { RequestQueryParams } from '@/services/dtos/request';
 import { UsersPaginatedResponse, UsersQueryParams } from '@/services/dtos/user';
 import { axiosBaseQueryWithRetry } from '@/services/httpClient';
 
@@ -9,27 +10,22 @@ export const userSlice = createApi({
     endpoints: (builder) => ({
         getUsers: builder.query<UsersPaginatedResponse, UsersQueryParams>({
             query: (
-                { skip = 0, limit = 10, q, filter } = { skip: 0, limit: 10 },
+                { skip = 0, limit = 10, filter } = { skip: 0, limit: 10 },
             ) => {
-                let url: string = 'users';
+                const url =
+                    typeof filter === 'object' ? 'users/filter' : 'users';
 
-                if (q) {
-                    url = 'users/search';
-                } else if (typeof filter === 'object') {
-                    url = 'users/filter';
+                const params: RequestQueryParams = {
+                    skip,
+                    limit,
+                };
+
+                if (typeof filter === 'object') {
+                    params.key = filter.key;
+                    params.value = filter.value;
                 }
 
-                return {
-                    url,
-                    method: 'get',
-                    params: {
-                        skip,
-                        limit,
-                        q,
-                        key: filter?.key,
-                        value: filter?.value,
-                    },
-                };
+                return { url, method: 'get', params };
             },
             onCacheEntryAdded: async (
                 { limit },

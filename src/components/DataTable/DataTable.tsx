@@ -35,6 +35,7 @@ export interface DataTableProps<ItemType, ToolbarActionKey> {
     limit?: number;
     limitOptions?: Array<number>;
     onLimitChange?: (limit: number) => void;
+    renderFilters?: () => ReactNode | ReactNode[];
 }
 
 export function DataTable<T, ToolbarActionKey = string>({
@@ -52,6 +53,7 @@ export function DataTable<T, ToolbarActionKey = string>({
     limit,
     limitOptions,
     onLimitChange,
+    renderFilters,
 }: DataTableProps<T, ToolbarActionKey>) {
     return (
         <div className="flex flex-1 flex-col overflow-x-auto rounded-lg border border-gray-100">
@@ -68,6 +70,11 @@ export function DataTable<T, ToolbarActionKey = string>({
                     ))}
                 </div>
             </div>
+            {typeof renderFilters === 'function' && (
+                <div className="border-t border-t-gray-100 py-2">
+                    {renderFilters?.()}
+                </div>
+            )}
             <div
                 className={`w-full h-0.5 ${loading ? 'bg-blue/20' : 'bg-gray-50/30'} overflow-hidden rounded`}
             >
@@ -117,13 +124,14 @@ export function DataTable<T, ToolbarActionKey = string>({
                 />
 
                 {Array.isArray(limitOptions) && (
-                    <Select
-                        aria-label="page-limit"
-                        className="w-20"
-                        value={limit}
-                        options={limitOptions}
-                        onChange={(v) => onLimitChange?.(v as number)}
-                    />
+                    <div>
+                        <Select
+                            aria-label="page-limit"
+                            value={limit}
+                            options={limitOptions}
+                            onChange={(v) => onLimitChange?.(v as number)}
+                        />
+                    </div>
                 )}
             </div>
         </div>

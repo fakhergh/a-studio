@@ -12,7 +12,7 @@ export function IconButton({ disabled, ...props }: IconButtonProps) {
         <button
             type="button"
             disabled={disabled}
-            className={`bg-white border border-gray-200 focus:outline-none font-medium rounded-lg text-4xl p-1.5 text-center inline-flex items-center me-2 ${disabled ? 'cursor-default' : 'hover:bg-gray-100 cursor-pointer'}`}
+            className={`flex bg-white border border-gray-200 focus:outline-none font-medium rounded-lg w-8 h-8 items-center justify-center me-2 ${disabled ? 'cursor-default' : 'hover:bg-gray-100 cursor-pointer'}`}
             {...props}
         >
             {props.icon}

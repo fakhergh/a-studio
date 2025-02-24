@@ -10,6 +10,7 @@ enum ColumnKey {
     LAST_NAME,
     MAIDEN_NAME,
     AGE,
+    BIRTHDATE,
     GENDER,
     EMAIL,
     USER_NAME,
@@ -27,6 +28,7 @@ export interface UserDataTableRowContainerProps
     lastName: string;
     maidenName: string;
     age: number;
+    birthDate: string;
     gender: string;
     email: string;
     username: string;
@@ -43,6 +45,7 @@ export function UserDataTableRowContainer({
     lastName,
     maidenName,
     age,
+    birthDate,
     gender,
     email,
     username,
@@ -59,6 +62,7 @@ export function UserDataTableRowContainer({
         { itemKey: ColumnKey.LAST_NAME, value: lastName, type: 'text' },
         { itemKey: ColumnKey.MAIDEN_NAME, value: maidenName, type: 'text' },
         { itemKey: ColumnKey.AGE, value: age, type: 'text' },
+        { itemKey: ColumnKey.BIRTHDATE, value: birthDate, type: 'text' },
         { itemKey: ColumnKey.GENDER, value: gender, type: 'text' },
         { itemKey: ColumnKey.EMAIL, value: email, type: 'text' },
         { itemKey: ColumnKey.USER_NAME, value: username, type: 'text' },

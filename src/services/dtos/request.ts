@@ -3,6 +3,11 @@ export interface PaginationQueryParams {
     limit?: number;
 }
 
+export interface RequestQueryParams extends PaginationQueryParams {
+    key?: string;
+    value?: string | number;
+}
+
 export interface PaginatedResponse {
     limit: number;
     skip: number;

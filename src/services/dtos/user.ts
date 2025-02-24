@@ -74,10 +74,9 @@ export interface User {
 }
 
 export interface UsersQueryParams extends PaginationQueryParams {
-    q?: string;
     filter?: {
         key: string;
-        value: string;
+        value: string | number;
     };
 }
 

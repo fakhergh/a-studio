@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { ChangeEventHandler, useCallback, useMemo, useState } from 'react';
 
 import {
     Column,
@@ -7,12 +7,15 @@ import {
     DataTableRenderRow,
     ToolbarAction,
 } from '@/components/DataTable/DataTable';
+import { Input } from '@/components/Input/Input';
+import { Select } from '@/components/Select/Select';
 import {
     ProductDataTableRowContainer,
     ProductDataTableRowContainerProps,
 } from '@/containers/ProductDataTableRowContainer/ProductDataTableRowContainer';
 import { useTotalPages } from '@/hooks/useTotalPages';
 import { IconRefresh } from '@/icons/IconRefresh';
+import { useGetCategoriesQuery } from '@/services/slices/categorySlice';
 import { useGetProductsQuery } from '@/services/slices/productSlice';
 
 export const Route = createFileRoute('/products')({
@@ -25,32 +28,42 @@ enum ToolbarActionKey {
     REFRESH,
 }
 
+const columns: Array<Column> = [
+    { itemKey: 'id', title: 'ID' },
+    { itemKey: 'title', title: 'Title' },
+    { itemKey: 'category', title: 'Category' },
+    { itemKey: 'price', title: 'Price' },
+    { itemKey: 'rating', title: 'Rating' },
+    { itemKey: 'stock', title: 'Stock' },
+    { itemKey: 'brand', title: 'Brand' },
+    { itemKey: 'sku', title: 'SKU' },
+    { itemKey: 'weight', title: 'Weight' },
+    { itemKey: 'warranty', title: 'Warranty' },
+    { itemKey: 'minOrderQuantity', title: 'Min Order Quantity' },
+    { itemKey: 'availabilityStatus', title: 'Availability Status' },
+    { itemKey: 'discountPercentage', title: 'Discount Percentage' },
+];
+
 function RouteComponent() {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(limitOptions[0]);
+    const [searchText, setSearchText] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState<string>('');
+
+    const { data: categoriesData } = useGetCategoriesQuery({});
+
+    const categoryFilterOptions = useMemo(
+        () => categoriesData?.map((category) => category.slug) ?? [],
+        [categoriesData],
+    );
 
     const { data, isFetching, refetch } = useGetProductsQuery({
         skip: Math.max(page - 1, 0) * limit,
         limit,
+        category: categoryFilter || undefined,
     });
 
     const totalPages = useTotalPages(data?.totalPages);
-
-    const columns: Array<Column> = [
-        { itemKey: 'id', title: 'ID' },
-        { itemKey: 'title', title: 'Title' },
-        { itemKey: 'category', title: 'Category' },
-        { itemKey: 'price', title: 'Price' },
-        { itemKey: 'rating', title: 'Rating' },
-        { itemKey: 'stock', title: 'Stock' },
-        { itemKey: 'brand', title: 'Brand' },
-        { itemKey: 'sku', title: 'SKU' },
-        { itemKey: 'weight', title: 'Weight' },
-        { itemKey: 'warranty', title: 'Warranty' },
-        { itemKey: 'minOrderQuantity', title: 'Min Order Quantity' },
-        { itemKey: 'availabilityStatus', title: 'Availability Status' },
-        { itemKey: 'discountPercentage', title: 'Discount Percentage' },
-    ];
 
     const toolbarActions: Array<ToolbarAction<ToolbarActionKey>> = [
         {
@@ -68,22 +81,55 @@ function RouteComponent() {
         }
     };
 
-    const rows: Array<ProductDataTableRowContainerProps> =
-        data?.products.map((product) => ({
-            id: product.id,
-            title: product.title,
-            category: product.category,
-            price: `${product.price}$`,
-            rating: `${product.rating} / 5`,
-            stock: product.stock,
-            brand: product.brand,
-            sku: product.sku,
-            weight: `${product.weight}kg`,
-            minOrderQuantity: product.minimumOrderQuantity,
-            warranty: product.warrantyInformation,
-            availabilityStatus: product.availabilityStatus,
-            discountPercentage: `${product.discountPercentage}%`,
-        })) ?? [];
+    const rows: Array<ProductDataTableRowContainerProps> = useMemo(
+        () =>
+            data?.products.map((product) => ({
+                id: product.id,
+                title: product.title,
+                category: product.category,
+                price: product.price,
+                rating: product.rating,
+                stock: product.stock,
+                brand: product.brand,
+                sku: product.sku,
+                weight: product.weight,
+                minOrderQuantity: product.minimumOrderQuantity,
+                warranty: product.warrantyInformation,
+                availabilityStatus: product.availabilityStatus,
+                discountPercentage: product.discountPercentage,
+            })) ?? [],
+        [data?.products],
+    );
+
+    const filteredRow = useMemo(() => {
+        const formattedFilterText = searchText.toLowerCase().trim();
+
+        if (formattedFilterText) {
+            return rows.filter(
+                (row) =>
+                    row.id.toString().includes(formattedFilterText) ||
+                    row.title.toLowerCase().includes(formattedFilterText) ||
+                    row.category.toLowerCase().includes(formattedFilterText) ||
+                    row.price.toString().includes(formattedFilterText) ||
+                    row.rating.toString().includes(formattedFilterText) ||
+                    row.stock.toString().includes(formattedFilterText) ||
+                    row.brand.includes(formattedFilterText) ||
+                    row.sku.toLowerCase().includes(formattedFilterText) ||
+                    row.weight.toString().includes(formattedFilterText) ||
+                    row.warranty.toLowerCase().includes(formattedFilterText) ||
+                    row.minOrderQuantity
+                        .toString()
+                        .includes(formattedFilterText) ||
+                    row.availabilityStatus
+                        .toLowerCase()
+                        .includes(formattedFilterText) ||
+                    row.discountPercentage
+                        .toString()
+                        .includes(formattedFilterText),
+            );
+        }
+        return rows;
+    }, [searchText, rows]);
 
     const renderRow: DataTableRenderRow<ProductDataTableRowContainerProps> = (
         item,
@@ -103,13 +149,48 @@ function RouteComponent() {
         setLimit(nextLimit);
     };
 
+    const onSearchTextChange: ChangeEventHandler<HTMLInputElement> = (
+        event,
+    ) => {
+        setSearchText(event.target.value);
+    };
+
+    const onCategoryChange = (category: string | number) => {
+        setCategoryFilter(category as string);
+    };
+
+    const renderFilters = useCallback(
+        () => (
+            <div className="flex flex-wrap p-2 gap-2 justify-between items-center">
+                <div className="flex-1">
+                    <Input
+                        label="Search..."
+                        placeholder="Filter list by keyword"
+                        value={searchText}
+                        onChange={onSearchTextChange}
+                    />
+                </div>
+                <div>
+                    <Select
+                        label="Category"
+                        aria-label="page-limit"
+                        value={categoryFilter}
+                        options={categoryFilterOptions}
+                        onChange={onCategoryChange}
+                    />
+                </div>
+            </div>
+        ),
+        [categoryFilter, categoryFilterOptions, searchText],
+    );
+
     return (
         <>
             <DataTable<ProductDataTableRowContainerProps, ToolbarActionKey>
                 loading={isFetching}
                 title="Products"
                 columns={columns}
-                rows={rows}
+                rows={filteredRow}
                 toolbarActions={toolbarActions}
                 onToolbarActionClick={onToolbarActionClick}
                 keyExtractor={keyExtractor}
@@ -120,6 +201,7 @@ function RouteComponent() {
                 limit={limit}
                 limitOptions={limitOptions}
                 onLimitChange={onLimitChange}
+                renderFilters={renderFilters}
             />
         </>
     );
