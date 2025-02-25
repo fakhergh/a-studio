@@ -182,6 +182,7 @@ function RouteComponent() {
     };
 
     const onBirthdateChange = (birthdate: string) => {
+        if (!birthdate) return setFilter(undefined);
         setFilter({ key: 'birthDate', value: birthdate });
     };
 
